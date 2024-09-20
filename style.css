@@ -1,0 +1,156 @@
+
+* {
+    box-sizing: border-box;
+}
+p{
+    margin: 0;
+
+}
+body{
+    margin: 0;
+    background: #fbfbfb;
+    padding: 0;
+}
+
+.button:hover{
+   background: #333;
+   color: wheat;
+}
+
+.button {
+    text-align: center;
+    font-size:60px;
+    background: transparent;
+    padding: 15px 30px;
+    border-radius: 10px;
+    transition: background 0.3s ease-in;
+    cursor: pointer;
+}
+.buttonBig {
+    font-size: 100px;
+}
+
+.quizWarapper {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Inter", sans-serif;
+    font-style: normal;
+    
+}
+
+.question {
+    width: 100%;
+    padding: 60px 30px;
+    border: 1px solid black;
+    font-size: 70px;
+    margin: 40px 0;
+    border-radius: 10px;
+
+}
+.nextQuestion {
+    margin-top: 40px;
+    align-self:end;
+}
+.answers{
+    display: grid;
+    justify-content: space-between;  
+    grid-template-columns: auto auto;
+    gap: 40px ;
+
+}
+.answers .answer {
+    width: auto;
+
+}
+.answers .answer.success {
+    background: green;
+}
+.answers .answer.wrong {
+    background: red;
+}
+
+
+.quizWarapper .quizPanel {
+    text-align: center;
+    width: 70vw;
+    display: none;
+    flex-direction: column;
+}
+
+.timer {
+    text-align: right;
+    font-size: 70px;
+
+
+}
+.quizEnd {
+    display: none;
+    text-align: center;
+}
+
+@media screen and (max-width:1200px) {
+    .question {
+        margin-top: 20px;
+        font-size: 45px;
+    }
+    .answer {
+        font-size: 40px;
+    }
+    .nextQuestion {
+        font-size: 40px;
+    }
+}
+
+
+@media screen and (max-width:991px) {
+    .timer {
+        font-size: 35px;
+    }
+    .question {
+        font-size: 40px;
+        padding: 40px 15px;
+        margin: 25px 0;
+    }
+    .answer {
+        font-size: 35px;
+    }
+    .nextQuestion {
+        font-size: 35px;
+    }
+    .button {
+        padding: 10px 20px;
+    }
+    .answers {
+        gap: 25px;
+    }
+}
+
+
+
+@media screen and (max-width:500px) {
+    .timer {
+        font-size: 20px;
+    }
+    .question {
+        font-size: 25px;
+        padding:25px 10px;
+        margin-top: 10px;
+        
+    }
+    .answer {
+        font-size: 20px;
+    }
+    .answers {
+        gap: 15px;
+    }
+    .nextQuestion {
+        font-size: 25px;
+    }
+    .button {
+        padding: 10px 10px;
+    }
+}
