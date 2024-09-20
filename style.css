@@ -103,6 +103,9 @@ body{
     .nextQuestion {
         font-size: 40px;
     }
+    .button {
+        font-size: 40px;
+    }
 }
 
 
@@ -123,6 +126,7 @@ body{
     }
     .button {
         padding: 10px 20px;
+        font-size: 35px;
     }
     .answers {
         gap: 25px;
@@ -152,5 +156,6 @@ body{
     }
     .button {
         padding: 10px 10px;
+        font-size: 25px;
     }
 }
