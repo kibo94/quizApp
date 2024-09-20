@@ -120,7 +120,7 @@
             uiMn.populateTimer(timer)
             setQuestion();
             setAnswers()
-            // runTimer();
+            runTimer();
         }
         const nextQuestion = () => {
             cleanTimer();
