@@ -54,7 +54,7 @@
                 answerHtmlElement.textContent = answer;
                 answersWrapper.appendChild(answerHtmlElement)
                 answerHtmlElement.onclick = () => {
-                    const isAnswerCorrect = quizMn.checkAnswer(answer);
+                    const { isAnswerCorrect, correct_answer } = quizMn.checkAnswer(answer);
                     nextQuestionEl.disabled = true;
 
                     if (isAnswerCorrect) {
@@ -67,7 +67,15 @@
                         }, 3000)
                         return;
                     }
-                    setTimeout(() => { answerHtmlElement.classList.add("wrong") }, 2000)
+                    setTimeout(() => {
+                        document.querySelectorAll(".answers .button").forEach(ans => {
+                            if (ans.textContent == correct_answer) {
+                                ans.classList.add("success")
+                            }
+                        })
+                        answerHtmlElement.classList.add("wrong")
+
+                    }, 2000)
                     setTimeout(() => {
                         nextQuestionEl.disabled = false;
                         quizMn.nextQuestion();
@@ -90,32 +98,6 @@
         let currentQuestionIndex = 0;
         let question = "";
         let questions = [
-            //     {
-            //         question: "koji je glavni grad Srbije ?",
-            //         answer: { id: 1 },
-            //         answers: [{ answer: "Beograd", id: 1, }, { answer: "Nis", id: 2, }, { answer: "Cacak", id: 3, }, { answer: "Novi sad", id: 4, }]
-            //     },
-            //     {
-            //         question: "Boja neba je ? ",
-            //         answer: { id: 2 },
-            //         answers: [{ answer: "Crvena", id: 1, }, { answer: "Plava", id: 2, }, { answer: "Crna", id: 3, }, { answer: "Bela", id: 4, }]
-            //     },
-            //     {
-            //         question: "Koliko slova ima azbuka  ? ",
-            //         answer: { id: 4 },
-            //         answers: [{ answer: "12", id: 1, }, { answer: "40", id: 2, }, { answer: "17", id: 3, }, { answer: "30", id: 4, }]
-            //     },
-            //     {
-            //         question: "Grad Visoko se nalazi u ?",
-            //         answer: { id: 2 },
-            //         answers: [{ answer: "Srbiji", id: 1, }, { answer: "BIH", id: 2, }, { answer: "Hrvatska", id: 3, }, { answer: "Crna Gora", id: 4, }]
-            //     },
-            //     {
-            //         question: "Jedinica za struju je ?",
-            //         answer: { id: 1 },
-            //         answers: [{ answer: "Amper", id: 1, }, { answer: "Volt", id: 2, }, { answer: "Om", id: 3, }, { answer: "Vat", id: 4, }]
-            //     }
-            // ]
         ]
         const fetchQuestions = async () => {
             var data = await fetch("https://opentdb.com/api.php?amount=10");
@@ -154,7 +136,7 @@
                 isCorrectAnswer = true;
                 totalPoints += 5;
             }
-            return isCorrectAnswer;
+            return { isCorrectAnswer, correct_answer: questions[currentQuestionIndex].correct_answer };
         }
 
         const setQuestion = () => {
@@ -235,8 +217,3 @@
 
 }())
 
-
-
-let arr = ["x", "y", "z"];
-
-console.log(arr.sort(() => Math.random() - 0.5))
