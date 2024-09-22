@@ -3,7 +3,7 @@
 (function () {
     // App elements
     const question = document.getElementById("question");
-    const nextQuestion = document.getElementById("nextQuestion")
+    const nextQuestionEl = document.getElementById("nextQuestion")
     const startAQuizBtn = document.querySelector(".startAQuiz")
     const playAgain = document.querySelector(".playAgain")
     const quizPanel = document.querySelector('.quizPanel')
@@ -55,17 +55,21 @@
                 answersWrapper.appendChild(answerHtmlElement)
                 answerHtmlElement.onclick = () => {
                     const isAnswerCorrect = quizMn.checkAnswer(answer);
+                    nextQuestionEl.disabled = true;
 
                     if (isAnswerCorrect) {
                         setTimeout(() => { answerHtmlElement.classList.add("success") }, 1000)
 
                         setTimeout(() => {
+                            nextQuestionEl.disabled = false;
                             quizMn.nextQuestion();
+
                         }, 3000)
                         return;
                     }
                     setTimeout(() => { answerHtmlElement.classList.add("wrong") }, 2000)
                     setTimeout(() => {
+                        nextQuestionEl.disabled = false;
                         quizMn.nextQuestion();
                     }, 3000)
                 }
@@ -138,6 +142,7 @@
         };
 
         const checkAnswer = (answer) => {
+            freezTime();
             let isCorrectAnswer = false;
             // Check is answer is correct
             if (answer.id == questions[currentQuestionIndex].answer.id) {
@@ -183,6 +188,10 @@
             clearInterval(timerInterval);
             uiMn.populateTimer(timer);
         }
+        const freezTime = () => {
+            clearInterval(timerInterval);
+            uiMn.populateTimer(timer);
+        }
 
         const initApp = () => {
             eventMn.playAgainEvent()
@@ -190,7 +199,7 @@
             eventMn.startAQuizEvent();
             uiMn.populateStageOfApp(stageOfApp)
         }
-        return { nextQuestion, setQuestion, startQuiz, setAnswers, checkAnswer, initApp, playAgain, runTimer, cleanTimer }
+        return { nextQuestion, setQuestion, startQuiz, setAnswers, checkAnswer, initApp, playAgain, runTimer, cleanTimer, freezTime }
     }
 
 

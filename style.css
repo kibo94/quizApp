@@ -16,6 +16,14 @@ body{
    background: #333;
    color: wheat;
 }
+.button:disabled {
+    color: lightgray;
+}
+.button:disabled:hover {
+    background: transparent;
+    color: lightgray;
+  
+}
 
 .button {
     text-align: center;
