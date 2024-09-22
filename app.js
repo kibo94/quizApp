@@ -51,7 +51,7 @@
             answers.forEach(answer => {
                 const answerHtmlElement = document.createElement('button');
                 answerHtmlElement.className = "button answer";
-                answerHtmlElement.textContent = answer.answer;
+                answerHtmlElement.textContent = answer;
                 answersWrapper.appendChild(answerHtmlElement)
                 answerHtmlElement.onclick = () => {
                     const isAnswerCorrect = quizMn.checkAnswer(answer);
@@ -90,33 +90,38 @@
         let currentQuestionIndex = 0;
         let question = "";
         let questions = [
-            {
-                question: "koji je glavni grad Srbije ?",
-                answer: { id: 1 },
-                answers: [{ answer: "Beograd", id: 1, }, { answer: "Nis", id: 2, }, { answer: "Cacak", id: 3, }, { answer: "Novi sad", id: 4, }]
-            },
-            {
-                question: "Boja neba je ? ",
-                answer: { id: 2 },
-                answers: [{ answer: "Crvena", id: 1, }, { answer: "Plava", id: 2, }, { answer: "Crna", id: 3, }, { answer: "Bela", id: 4, }]
-            },
-            {
-                question: "Koliko slova ima azbuka  ? ",
-                answer: { id: 4 },
-                answers: [{ answer: "12", id: 1, }, { answer: "40", id: 2, }, { answer: "17", id: 3, }, { answer: "30", id: 4, }]
-            },
-            {
-                question: "Grad Visoko se nalazi u ?",
-                answer: { id: 2 },
-                answers: [{ answer: "Srbiji", id: 1, }, { answer: "BIH", id: 2, }, { answer: "Hrvatska", id: 3, }, { answer: "Crna Gora", id: 4, }]
-            },
-            {
-                question: "Jedinica za struju je ?",
-                answer: { id: 1 },
-                answers: [{ answer: "Amper", id: 1, }, { answer: "Volt", id: 2, }, { answer: "Om", id: 3, }, { answer: "Vat", id: 4, }]
-            }
+            //     {
+            //         question: "koji je glavni grad Srbije ?",
+            //         answer: { id: 1 },
+            //         answers: [{ answer: "Beograd", id: 1, }, { answer: "Nis", id: 2, }, { answer: "Cacak", id: 3, }, { answer: "Novi sad", id: 4, }]
+            //     },
+            //     {
+            //         question: "Boja neba je ? ",
+            //         answer: { id: 2 },
+            //         answers: [{ answer: "Crvena", id: 1, }, { answer: "Plava", id: 2, }, { answer: "Crna", id: 3, }, { answer: "Bela", id: 4, }]
+            //     },
+            //     {
+            //         question: "Koliko slova ima azbuka  ? ",
+            //         answer: { id: 4 },
+            //         answers: [{ answer: "12", id: 1, }, { answer: "40", id: 2, }, { answer: "17", id: 3, }, { answer: "30", id: 4, }]
+            //     },
+            //     {
+            //         question: "Grad Visoko se nalazi u ?",
+            //         answer: { id: 2 },
+            //         answers: [{ answer: "Srbiji", id: 1, }, { answer: "BIH", id: 2, }, { answer: "Hrvatska", id: 3, }, { answer: "Crna Gora", id: 4, }]
+            //     },
+            //     {
+            //         question: "Jedinica za struju je ?",
+            //         answer: { id: 1 },
+            //         answers: [{ answer: "Amper", id: 1, }, { answer: "Volt", id: 2, }, { answer: "Om", id: 3, }, { answer: "Vat", id: 4, }]
+            //     }
+            // ]
         ]
-
+        const fetchQuestions = async () => {
+            var data = await fetch("https://opentdb.com/api.php?amount=10");
+            var questionsData = await data.json();
+            questions = questionsData.results
+        }
 
         const startQuiz = () => {
             stageOfApp = 2;
@@ -145,7 +150,7 @@
             freezTime();
             let isCorrectAnswer = false;
             // Check is answer is correct
-            if (answer.id == questions[currentQuestionIndex].answer.id) {
+            if (answer == questions[currentQuestionIndex].correct_answer) {
                 isCorrectAnswer = true;
                 totalPoints += 5;
             }
@@ -159,8 +164,9 @@
         }
 
         const setAnswers = () => {
-            let answers = questions[currentQuestionIndex].answers;
-            uiMn.setAnswers(answers)
+            const allAnswers = [questions[currentQuestionIndex].correct_answer, ...questions[currentQuestionIndex].incorrect_answers]
+            let randomizedQuestions = allAnswers.sort(() => Math.random() - 0.5)
+            uiMn.setAnswers(randomizedQuestions)
 
         }
         const playAgain = () => {
@@ -194,12 +200,13 @@
         }
 
         const initApp = () => {
+            fetchQuestions()
             eventMn.playAgainEvent()
             eventMn.nextQuestionEvent()
             eventMn.startAQuizEvent();
             uiMn.populateStageOfApp(stageOfApp)
         }
-        return { nextQuestion, setQuestion, startQuiz, setAnswers, checkAnswer, initApp, playAgain, runTimer, cleanTimer, freezTime }
+        return { nextQuestion, setQuestion, startQuiz, setAnswers, checkAnswer, initApp, playAgain, runTimer, cleanTimer, freezTime, fetchQuiz: fetchQuestions }
     }
 
 
@@ -230,3 +237,6 @@
 
 
 
+let arr = ["x", "y", "z"];
+
+console.log(arr.sort(() => Math.random() - 0.5))
