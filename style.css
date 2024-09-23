@@ -178,6 +178,9 @@ body{
         font-size: 25px;
         margin-top: 20px;
     }
+    .quizWarapper .quizPanel {
+        width: 90vw;
+    }
     .button {
         padding: 10px 10px;
         font-size: 25px;
