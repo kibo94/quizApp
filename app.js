@@ -1,5 +1,3 @@
-
-
 (function () {
     // App elements
     const question = document.getElementById("question");
@@ -12,7 +10,6 @@
     const totalPts = document.getElementById("totalPoints");
     const timerElement = document.querySelector(".timer");
     const homeBtn = document.querySelector(".home");
-
     // App menagers
     const quizMn = quizMenager();
     const uiMn = uiMenager();
@@ -89,19 +86,17 @@
     }
 
     function quizMenager() {
-        let timer = 15;
+        let timer = 5;
         let timerInterval;
         let stageOfApp = 1;
         let totalPoints = 0;
         let currentQuestionIndex = 0;
         let correctAnswer;
-        let question = "";
         let questions = [
         ]
         let answers = []
         const fetchQuestions = async () => {
             var data = await fetch("https://opentdb.com/api.php?amount=10")
-
             var questionsData = await data.json();
             questions = questionsData.results
         }
@@ -111,16 +106,13 @@
             uiMn.populateStageOfApp(stageOfApp)
             uiMn.populateTimer(timer)
             setQuestion();
-            setAnswers()
-            runTimer();
+
         }
         const nextQuestion = async () => {
             cleanTimer();
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.length) {
                 setQuestion()
-                setAnswers()
-                runTimer();
             }
             else {
                 stageOfApp = 3;
@@ -142,9 +134,10 @@
         }
 
         const setQuestion = () => {
-            question = questions[currentQuestionIndex]
-            // populate ui
-            uiMn.populateQuestion(question)
+            uiMn.populateQuestion(questions[currentQuestionIndex])
+            setAnswers()
+            runTimer();
+
         }
 
         const setAnswers = () => {
@@ -162,17 +155,20 @@
             stageOfApp = 2;
             uiMn.populateStageOfApp(stageOfApp);
             setQuestion()
-            setAnswers()
-            runTimer()
         }
         const runTimer = () => {
             timerInterval = setInterval(() => {
                 timer--;
-                if (timer > 0) {
+                if (timer >= 0) {
                     uiMn.populateTimer(timer)
                 }
                 else {
-                    nextQuestion()
+                    clearInterval(timerInterval)
+                    setTimeout(() => { document.querySelectorAll(".answers .button")[quizMn.getCorrectAnswerIndex()].classList.add('success') }, 1000)
+                    setTimeout(() => {
+                        nextQuestion()
+                    }, 3000)
+
                 }
 
             }, 1000);
@@ -209,20 +205,16 @@
         }
     }
 
-
     function eventMenager() {
         const startAQuizEvent = () => {
             startAQuizBtn.onclick = () => {
                 quizMn.startQuiz();
             }
-
         }
         const playAgainEvent = () => {
             playAgain.onclick = () => {
                 quizMn.playAgain();
             }
-
-
         }
         const backToHomeEvent = () => {
             homeBtn.onclick = () => {
@@ -236,7 +228,6 @@
                     quizMn.nextQuestion();
                 }, 3000)
             }
-
         }
         return { startAQuizEvent, playAgainEvent, nextQuestionEvent, backToHomeEvent }
     }
