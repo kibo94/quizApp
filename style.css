@@ -25,6 +25,10 @@ body{
     color: lightgray;
   
 }
+.button.nextQuestion:hover{
+    background: transparent;
+    color: white;
+}
 
 .button {
     text-align: center;
