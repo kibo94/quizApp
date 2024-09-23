@@ -8,13 +8,14 @@ p{
 }
 body{
     margin: 0;
-    background: #fbfbfb;
+    background: linear-gradient(135deg, #5503d5, #7d2ae8, #9e53fa);
+    color: white;
     padding: 0;
 }
 
 .button:hover{
-   background: #333;
-   color: wheat;
+   background: white;
+   color: #5503d5;
 }
 .button:disabled {
     color: lightgray;
@@ -33,6 +34,11 @@ body{
     border-radius: 10px;
     transition: background 0.3s ease-in;
     cursor: pointer;
+    color: white;
+    outline: none;
+    box-shadow: none;
+    border: 1px solid white;
+   
 }
 .buttonBig {
     font-size: 100px;
@@ -47,13 +53,14 @@ body{
     align-items: center;
     font-family: "Inter", sans-serif;
     font-style: normal;
+  
     
 }
 
 .question {
     width: 100%;
     padding: 60px 30px;
-    border: 1px solid black;
+    border: 3px solid rgb(231, 231, 109);
     font-size: 70px;
     margin: 40px 0;
     border-radius: 10px;
@@ -71,14 +78,16 @@ body{
 
 }
 .answers .answer {
-    width: auto;
+    width: 100%;
 
 }
 .answers .answer.success {
-    background: green;
+    background: rgb(2, 119, 2);
+    color: white;
 }
 .answers .answer.wrong {
-    background: red;
+    background: rgb(190, 50, 50);
+    color: white;
 }
 
 
@@ -158,6 +167,8 @@ body{
     }
     .answers {
         gap: 15px;
+        grid-template-columns: auto;
+        justify-content: stretch; 
     }
     .nextQuestion {
         font-size: 25px;

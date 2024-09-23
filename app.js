@@ -46,48 +46,45 @@
                 }
             }
         }
+        const handleButtonsClasses = (badAnswerIndex = -1, goodAnswerIndex = -1) => {
+            if (badAnswerIndex == -1) {
+                setTimeout(() => { document.querySelectorAll(".answers .button")[goodAnswerIndex].classList.add('success') }, 1000)
+                setTimeout(() => {
+                    nextQuestionEl.disabled = false;
+                    quizMn.nextQuestion();
+                }, 3000)
+            }
+            else {
+                setTimeout(() => {
+                    document.querySelectorAll(".answers .button")[goodAnswerIndex].classList.add('success')
+                    document.querySelectorAll(".answers .button")[badAnswerIndex].classList.add('wrong')
+
+                }, 2000)
+                setTimeout(() => {
+                    nextQuestionEl.disabled = false;
+                    quizMn.nextQuestion();
+                }, 3000)
+            }
+
+        }
         const populateAnswers = (answers) => {
             answersWrapper.innerHTML = "";
-            answers.forEach(answer => {
+            answers.forEach((answer, i) => {
                 const answerHtmlElement = document.createElement('button');
                 answerHtmlElement.className = "button answer";
                 answerHtmlElement.textContent = answer;
                 answersWrapper.appendChild(answerHtmlElement)
                 answerHtmlElement.onclick = () => {
-                    const { isAnswerCorrect, correct_answer } = quizMn.checkAnswer(answer);
+                    const { badAnswerIndex, goodAnswerIndex } = quizMn.checkAnswer(answer)
                     nextQuestionEl.disabled = true;
-
-                    if (isAnswerCorrect) {
-                        setTimeout(() => { answerHtmlElement.classList.add("success") }, 1000)
-
-                        setTimeout(() => {
-                            nextQuestionEl.disabled = false;
-                            quizMn.nextQuestion();
-
-                        }, 3000)
-                        return;
-                    }
-                    setTimeout(() => {
-                        document.querySelectorAll(".answers .button").forEach(ans => {
-                            if (ans.textContent == correct_answer) {
-                                ans.classList.add("success")
-                            }
-                        })
-                        answerHtmlElement.classList.add("wrong")
-
-                    }, 2000)
-                    setTimeout(() => {
-                        nextQuestionEl.disabled = false;
-                        quizMn.nextQuestion();
-                    }, 3000)
+                    handleButtonsClasses(badAnswerIndex, goodAnswerIndex)
                 }
             })
         }
         const endOfQuiz = (points) => {
             totalPts.textContent = points;
-
         }
-        return { populateQuestion, setAnswers: populateAnswers, endOfQuiz, populateStageOfApp, populateTimer }
+        return { populateQuestion, setAnswers: populateAnswers, endOfQuiz, populateStageOfApp, populateTimer, handleButtonsClasses }
     }
 
     function quizMenager() {
@@ -96,9 +93,11 @@
         let stageOfApp = 1;
         let totalPoints = 0;
         let currentQuestionIndex = 0;
+        let correctAnswer;
         let question = "";
         let questions = [
         ]
+        let answers = []
         const fetchQuestions = async () => {
             var data = await fetch("https://opentdb.com/api.php?amount=10");
             var questionsData = await data.json();
@@ -111,15 +110,21 @@
             uiMn.populateTimer(timer)
             setQuestion();
             setAnswers()
-            runTimer();
+            // runTimer();
         }
-        const nextQuestion = () => {
+        const nextQuestion = async () => {
+
             cleanTimer();
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.length) {
-                setQuestion()
-                setAnswers()
-                runTimer();
+                let goodAnswerIndex = answers.findIndex(ans => ans == correctAnswer)
+                setTimeout(() => { document.querySelectorAll(".answers .button")[goodAnswerIndex].classList.add('success') }, 1000)
+                setTimeout(() => {
+                    setQuestion()
+                    setAnswers()
+                    runTimer();
+                }, 3000)
+
             }
             else {
                 stageOfApp = 3;
@@ -130,13 +135,14 @@
 
         const checkAnswer = (answer) => {
             freezTime();
-            let isCorrectAnswer = false;
+            let badAnswer = questions[currentQuestionIndex].incorrect_answers.find(a => a == answer)
+            let goodAnswerIndex = answers.findIndex(ans => ans == correctAnswer)
+            let badAnswerIndex = answers.findIndex(ans => ans == badAnswer)
             // Check is answer is correct
             if (answer == questions[currentQuestionIndex].correct_answer) {
-                isCorrectAnswer = true;
                 totalPoints += 5;
             }
-            return { isCorrectAnswer, correct_answer: questions[currentQuestionIndex].correct_answer };
+            return { badAnswerIndex, goodAnswerIndex };
         }
 
         const setQuestion = () => {
@@ -146,7 +152,10 @@
         }
 
         const setAnswers = () => {
+            correctAnswer = "";
+            correctAnswer = questions[currentQuestionIndex].correct_answer;
             const allAnswers = [questions[currentQuestionIndex].correct_answer, ...questions[currentQuestionIndex].incorrect_answers]
+            answers = allAnswers;
             let randomizedQuestions = allAnswers.sort(() => Math.random() - 0.5)
             uiMn.setAnswers(randomizedQuestions)
 
@@ -158,6 +167,7 @@
             uiMn.populateStageOfApp(stageOfApp);
             setQuestion()
             setAnswers()
+            runTimer()
         }
         const runTimer = () => {
             timerInterval = setInterval(() => {
@@ -206,7 +216,7 @@
         }
 
         const nextQuestionEvent = () => {
-            nextQuestion.onclick = () => {
+            nextQuestionEl.onclick = () => {
                 quizMn.nextQuestion();
             }
 
