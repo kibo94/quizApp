@@ -86,7 +86,7 @@
     }
 
     function quizMenager() {
-        let timer = 5;
+        let timer = 20;
         let timerInterval;
         let stageOfApp = 1;
         let totalPoints = 0;
@@ -96,7 +96,7 @@
         ]
         let answers = []
         const fetchQuestions = async () => {
-            var data = await fetch("https://opentdb.com/api.php?amount=10")
+            var data = await fetch("https://opentdb.com/api.php?amount=8")
             var questionsData = await data.json();
             questions = questionsData.results
         }
