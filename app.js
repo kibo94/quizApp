@@ -11,6 +11,7 @@
     const quizEnd = document.querySelector('.quizEnd')
     const totalPts = document.getElementById("totalPoints");
     const timerElement = document.querySelector(".timer");
+    const homeBtn = document.querySelector(".home");
 
     // App menagers
     const quizMn = quizMenager();
@@ -111,7 +112,7 @@
             uiMn.populateTimer(timer)
             setQuestion();
             setAnswers()
-            // runTimer();
+            runTimer();
         }
         const nextQuestion = async () => {
             cleanTimer();
@@ -185,6 +186,10 @@
             clearInterval(timerInterval);
             uiMn.populateTimer(timer);
         }
+        const backToHome = () => {
+            stageOfApp = 1;
+            uiMn.populateStageOfApp(stageOfApp)
+        }
 
         const getCorrectAnswerIndex = () => answers.findIndex(ans => ans == correctAnswer)
 
@@ -193,9 +198,15 @@
             eventMn.playAgainEvent()
             eventMn.nextQuestionEvent()
             eventMn.startAQuizEvent();
+            eventMn.backToHomeEvent()
             uiMn.populateStageOfApp(stageOfApp)
         }
-        return { nextQuestion, setQuestion, startQuiz, setAnswers, checkAnswer, initApp, playAgain, runTimer, cleanTimer, freezTime, fetchQuiz: fetchQuestions, getCorrectAnswerIndex }
+        return {
+            nextQuestion, setQuestion, startQuiz,
+            setAnswers, checkAnswer, initApp, playAgain, runTimer,
+            cleanTimer, freezTime, fetchQuiz: fetchQuestions,
+            getCorrectAnswerIndex, backToHome
+        }
     }
 
 
@@ -210,12 +221,16 @@
             playAgain.onclick = () => {
                 quizMn.playAgain();
             }
+
+
         }
-
+        const backToHomeEvent = () => {
+            homeBtn.onclick = () => {
+                quizMn.backToHome()
+            }
+        }
         const nextQuestionEvent = () => {
-
             nextQuestionEl.onclick = () => {
-
                 setTimeout(() => { document.querySelectorAll(".answers .button")[quizMn.getCorrectAnswerIndex()].classList.add('success') }, 1000)
                 setTimeout(() => {
                     quizMn.nextQuestion();
@@ -223,7 +238,7 @@
             }
 
         }
-        return { startAQuizEvent, playAgainEvent, nextQuestionEvent, }
+        return { startAQuizEvent, playAgainEvent, nextQuestionEvent, backToHomeEvent }
     }
     quizMn.initApp()
 
