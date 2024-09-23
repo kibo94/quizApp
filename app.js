@@ -59,7 +59,7 @@
                     document.querySelectorAll(".answers .button")[goodAnswerIndex].classList.add('success')
                     document.querySelectorAll(".answers .button")[badAnswerIndex].classList.add('wrong')
 
-                }, 2000)
+                }, 1000)
                 setTimeout(() => {
                     nextQuestionEl.disabled = false;
                     quizMn.nextQuestion();
@@ -113,18 +113,12 @@
             // runTimer();
         }
         const nextQuestion = async () => {
-
             cleanTimer();
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.length) {
-                let goodAnswerIndex = answers.findIndex(ans => ans == correctAnswer)
-                setTimeout(() => { document.querySelectorAll(".answers .button")[goodAnswerIndex].classList.add('success') }, 1000)
-                setTimeout(() => {
-                    setQuestion()
-                    setAnswers()
-                    runTimer();
-                }, 3000)
-
+                setQuestion()
+                setAnswers()
+                runTimer();
             }
             else {
                 stageOfApp = 3;
@@ -191,6 +185,8 @@
             uiMn.populateTimer(timer);
         }
 
+        const getCorrectAnswerIndex = () => answers.findIndex(ans => ans == correctAnswer)
+
         const initApp = () => {
             fetchQuestions()
             eventMn.playAgainEvent()
@@ -198,7 +194,7 @@
             eventMn.startAQuizEvent();
             uiMn.populateStageOfApp(stageOfApp)
         }
-        return { nextQuestion, setQuestion, startQuiz, setAnswers, checkAnswer, initApp, playAgain, runTimer, cleanTimer, freezTime, fetchQuiz: fetchQuestions }
+        return { nextQuestion, setQuestion, startQuiz, setAnswers, checkAnswer, initApp, playAgain, runTimer, cleanTimer, freezTime, fetchQuiz: fetchQuestions, getCorrectAnswerIndex }
     }
 
 
@@ -216,8 +212,13 @@
         }
 
         const nextQuestionEvent = () => {
+
             nextQuestionEl.onclick = () => {
-                quizMn.nextQuestion();
+
+                setTimeout(() => { document.querySelectorAll(".answers .button")[quizMn.getCorrectAnswerIndex()].classList.add('success') }, 1000)
+                setTimeout(() => {
+                    quizMn.nextQuestion();
+                }, 3000)
             }
 
         }
