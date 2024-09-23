@@ -19,7 +19,7 @@
 
     function uiMenager() {
         const populateQuestion = questionVal => {
-            question.textContent = questionVal.question;
+            question.innerHTML = questionVal.question;
         }
         const populateTimer = (timer) => {
             timerElement.textContent = timer;
@@ -46,7 +46,7 @@
                 }
             }
         }
-        const handleButtonsClasses = (badAnswerIndex = -1, goodAnswerIndex = -1) => {
+        const handleButtonsClasses = (badAnswerIndex = -1, goodAnswerIndex) => {
             if (badAnswerIndex == -1) {
                 setTimeout(() => { document.querySelectorAll(".answers .button")[goodAnswerIndex].classList.add('success') }, 1000)
                 setTimeout(() => {
@@ -72,7 +72,7 @@
             answers.forEach((answer, i) => {
                 const answerHtmlElement = document.createElement('button');
                 answerHtmlElement.className = "button answer";
-                answerHtmlElement.textContent = answer;
+                answerHtmlElement.innerHTML = answer;
                 answersWrapper.appendChild(answerHtmlElement)
                 answerHtmlElement.onclick = () => {
                     const { badAnswerIndex, goodAnswerIndex } = quizMn.checkAnswer(answer)
@@ -99,7 +99,8 @@
         ]
         let answers = []
         const fetchQuestions = async () => {
-            var data = await fetch("https://opentdb.com/api.php?amount=10");
+            var data = await fetch("https://opentdb.com/api.php?amount=10")
+
             var questionsData = await data.json();
             questions = questionsData.results
         }
