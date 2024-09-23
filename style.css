@@ -172,6 +172,7 @@ body{
     }
     .nextQuestion {
         font-size: 25px;
+        margin-top: 20px;
     }
     .button {
         padding: 10px 10px;
