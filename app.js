@@ -86,7 +86,7 @@
     }
 
     function quizMenager() {
-        let timer = 20;
+        let timer = 15;
         let timerInterval;
         let stageOfApp = 1;
         let totalPoints = 0;
