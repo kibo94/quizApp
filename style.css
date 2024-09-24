@@ -110,7 +110,7 @@ body{
 
 .timer {
     text-align: right;
-    font-size: 70px;
+    font-size: inherit;
 
 
 }
@@ -137,7 +137,7 @@ body{
 
 
 @media screen and (max-width:991px) {
-    .timer {
+    .quizHeader {
         font-size: 35px;
     }
     .question {
@@ -163,7 +163,7 @@ body{
 
 
 @media screen and (max-width:500px) {
-    .timer {
+    .quizHeader {
         font-size: 20px;
     }
     .question {
