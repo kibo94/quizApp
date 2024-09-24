@@ -60,7 +60,11 @@ body{
   
     
 }
-
+.quizHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 .question {
     width: 100%;
     padding: 60px 30px;

@@ -10,17 +10,30 @@
     const totalPts = document.getElementById("totalPoints");
     const timerElement = document.querySelector(".timer");
     const homeBtn = document.querySelector(".home");
+    const quizSong = document.querySelector("#quiz-song");
+    const currentQuestionIndexEl = document.querySelector(".currentQuestionIndex")
     // App menagers
     const quizMn = quizMenager();
     const uiMn = uiMenager();
     const eventMn = eventMenager();
 
     function uiMenager() {
+
+        const playQuizMusic = () => {
+            quizSong.play()
+        }
+        const stopQuizMusic = () => {
+            quizSong.currentTime = 0
+            quizSong.pause()
+        }
         const populateQuestion = questionVal => {
             question.innerHTML = questionVal.question;
         }
         const populateTimer = (timer) => {
             timerElement.textContent = timer;
+        }
+        const setCurrentQuestionIndex = (index, totalQuestions) => {
+            currentQuestionIndexEl.textContent = `${index + 1} / ${totalQuestions}`
         }
         const populateStageOfApp = (stage) => {
             quizEnd.style.display = "none"
@@ -82,15 +95,14 @@
         const endOfQuiz = (points) => {
             totalPts.textContent = points;
         }
-        return { populateQuestion, setAnswers: populateAnswers, endOfQuiz, populateStageOfApp, populateTimer, handleButtonsClasses }
+        return { populateQuestion, setAnswers: populateAnswers, endOfQuiz, populateStageOfApp, populateTimer, handleButtonsClasses, playQuizMusic, stopQuizMusic, setCurrentQuestionIndex }
     }
-
     function quizMenager() {
-        let timer = 15;
+        let timer;
         let timerInterval;
         let stageOfApp = 1;
         let totalPoints = 0;
-        let currentQuestionIndex = 0;
+        let currentQuestionIndex;
         let correctAnswer;
         let questions = [
         ]
@@ -101,10 +113,15 @@
             questions = questionsData.results
         }
 
-        const startQuiz = () => {
+        const startQuiz = async () => {
+            await fetchQuestions()
+            currentQuestionIndex = 0
+            timer = 20;
             stageOfApp = 2;
+
             uiMn.populateStageOfApp(stageOfApp)
             uiMn.populateTimer(timer)
+            uiMn.playQuizMusic();
             setQuestion();
 
         }
@@ -117,6 +134,7 @@
             else {
                 stageOfApp = 3;
                 uiMn.populateStageOfApp(stageOfApp)
+                uiMn.stopQuizMusic();
                 uiMn.endOfQuiz(totalPoints);
             }
         };
@@ -134,6 +152,7 @@
         }
 
         const setQuestion = () => {
+            uiMn.setCurrentQuestionIndex(currentQuestionIndex, questions.length)
             uiMn.populateQuestion(questions[currentQuestionIndex])
             setAnswers()
             runTimer();
@@ -174,7 +193,7 @@
             }, 1000);
         }
         const cleanTimer = () => {
-            timer = 15;
+            timer = 20;
             clearInterval(timerInterval);
             uiMn.populateTimer(timer);
         }
@@ -190,11 +209,12 @@
         const getCorrectAnswerIndex = () => answers.findIndex(ans => ans == correctAnswer)
 
         const initApp = () => {
-            fetchQuestions()
+
             eventMn.playAgainEvent()
             eventMn.nextQuestionEvent()
             eventMn.startAQuizEvent();
             eventMn.backToHomeEvent()
+            uiMn.stopQuizMusic();
             uiMn.populateStageOfApp(stageOfApp)
         }
         return {

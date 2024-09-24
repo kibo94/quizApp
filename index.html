@@ -13,10 +13,16 @@
     />
   </head>
   <body>
+    <audio id="quiz-song" style="visibility: hidden; position: fixed top 0;" >
+      <source src="./135. Psalam - Slavite Gospoda (Praise the Lord) - VilaPrijedor (youtube).mp3" type="audio/mpeg" >
+    </audio>
     <div class="quizWarapper">
       <button class="startAQuiz button success">Startuj kviz</button>
       <div class="quizPanel">
-        <div class="timer"></div>
+        <div class="quizHeader"> 
+          <div class="currentQuestionIndex"></div>
+          <div class="timer"></div>
+        </div>
         <p id="question" class="question"></p>
         <div class="answers">
         </div>
