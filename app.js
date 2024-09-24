@@ -86,9 +86,17 @@
                 answerHtmlElement.innerHTML = answer;
                 answersWrapper.appendChild(answerHtmlElement)
                 answerHtmlElement.onclick = () => {
-                    const { badAnswerIndex, goodAnswerIndex } = quizMn.checkAnswer(answer)
+                    const { badAnswerIndex, goodAnswerIndex, isAnswered } = quizMn.checkAnswer(answer)
                     nextQuestionEl.disabled = true;
-                    handleButtonsClasses(badAnswerIndex, goodAnswerIndex)
+                    if (!isAnswered) {
+                        console.log("anser only one time")
+                        handleButtonsClasses(badAnswerIndex, goodAnswerIndex)
+                    }
+
+                    quizMn.setIsAnswer(true)
+
+
+
                 }
             })
         }
@@ -103,6 +111,7 @@
         let stageOfApp = 1;
         let totalPoints = 0;
         let currentQuestionIndex;
+        let isAnswered = false;
         let correctAnswer;
         let questions = [
         ]
@@ -118,14 +127,13 @@
             currentQuestionIndex = 0
             timer = 20;
             stageOfApp = 2;
-
             uiMn.populateStageOfApp(stageOfApp)
             uiMn.populateTimer(timer)
             uiMn.playQuizMusic();
             setQuestion();
-
         }
         const nextQuestion = async () => {
+
             cleanTimer();
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.length) {
@@ -140,6 +148,7 @@
         };
 
         const checkAnswer = (answer) => {
+
             freezTime();
             let badAnswer = questions[currentQuestionIndex].incorrect_answers.find(a => a == answer)
             let goodAnswerIndex = answers.findIndex(ans => ans == correctAnswer)
@@ -148,17 +157,18 @@
             if (answer == questions[currentQuestionIndex].correct_answer) {
                 totalPoints += 5;
             }
-            return { badAnswerIndex, goodAnswerIndex };
+            return { badAnswerIndex, goodAnswerIndex, isAnswered };
         }
 
         const setQuestion = () => {
+            isAnswered = false;
             uiMn.setCurrentQuestionIndex(currentQuestionIndex, questions.length)
             uiMn.populateQuestion(questions[currentQuestionIndex])
             setAnswers()
             runTimer();
 
         }
-
+        const setIsAnswer = (isAns) => isAnswered = isAns
         const setAnswers = () => {
             correctAnswer = "";
             correctAnswer = questions[currentQuestionIndex].correct_answer;
@@ -209,7 +219,6 @@
         const getCorrectAnswerIndex = () => answers.findIndex(ans => ans == correctAnswer)
 
         const initApp = () => {
-
             eventMn.playAgainEvent()
             eventMn.nextQuestionEvent()
             eventMn.startAQuizEvent();
@@ -221,7 +230,7 @@
             nextQuestion, setQuestion, startQuiz,
             setAnswers, checkAnswer, initApp, playAgain, runTimer,
             cleanTimer, freezTime, fetchQuiz: fetchQuestions,
-            getCorrectAnswerIndex, backToHome
+            getCorrectAnswerIndex, backToHome, setIsAnswer
         }
     }
 
