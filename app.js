@@ -123,6 +123,7 @@
         }
 
         const startQuiz = async () => {
+            isAnswered = false;
             await fetchQuestions()
             currentQuestionIndex = 0
             timer = 20;
@@ -179,6 +180,7 @@
 
         }
         const playAgain = () => {
+            isAnswered = false;
             totalPoints = 0;
             currentQuestionIndex = 0;
             stageOfApp = 2;
