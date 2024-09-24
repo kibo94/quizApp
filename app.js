@@ -134,11 +134,12 @@
             setQuestion();
         }
         const nextQuestion = async () => {
-
             cleanTimer();
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.length) {
                 setQuestion()
+                nextQuestionEl.disabled = false;
+
             }
             else {
                 stageOfApp = 3;
@@ -163,6 +164,7 @@
 
         const setQuestion = () => {
             isAnswered = false;
+
             uiMn.setCurrentQuestionIndex(currentQuestionIndex, questions.length)
             uiMn.populateQuestion(questions[currentQuestionIndex])
             setAnswers()
@@ -254,9 +256,11 @@
         }
         const nextQuestionEvent = () => {
             nextQuestionEl.onclick = () => {
+                nextQuestionEl.disabled = true;
                 setTimeout(() => { document.querySelectorAll(".answers .button")[quizMn.getCorrectAnswerIndex()].classList.add('success') }, 1000)
                 setTimeout(() => {
                     quizMn.nextQuestion();
+
                 }, 3000)
             }
         }
